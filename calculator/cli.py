@@ -6,6 +6,7 @@ from calculator.commands import (
     CountCommand,
     HelpCommand,
     HistoryCommand,
+    SummaryCommand,
 )
 from calculator.factory import CalculationFactory
 from calculator.inputs import read_csv_values
@@ -61,6 +62,11 @@ def prepare_command(line, session):
             raise ValueError("count does not accept arguments.")
         return CountCommand(session)
 
+    if name == "summary":
+        if len(parts) != 1:
+            raise ValueError("summary does not accept arguments.")
+        return SummaryCommand(session)
+
     if name == "csv":
         if len(parts) < 3:
             raise ValueError("Usage: csv mean|stddev PATH [column=NAME] [ddof=0|1]")
@@ -111,4 +117,5 @@ def run():
             break
 
         except (ValueError, TypeError, ArithmeticError, OSError) as error:
+            session.record_failure(error)
             print(f"Error: {error}")

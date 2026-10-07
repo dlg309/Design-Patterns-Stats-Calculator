@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 HELP = (
     "Commands: add/subtract/multiply/divide/modulo/absolute_difference A B; "
     "square/sqrt VALUE; power VALUE exponent=N; scale VALUE factor=N; "
-    "csv mean|stddev PATH [column=NAME] [ddof=0|1]; sum VALUES; mean VALUES; stddev VALUES ddof=0|1; history; clear; count; help; exit"
+    "csv mean|stddev PATH [column=NAME] [ddof=0|1]; sum VALUES; mean VALUES; stddev VALUES ddof=0|1; history; clear; count; summary; help; exit"
 )
 
 
@@ -67,3 +67,13 @@ class CountCommand(Command):
     def execute(self) -> str:
         count = len(self.session.get_history())
         return f"Calculations in history: {count}"
+
+
+class SummaryCommand(Command):
+    def __init__(self, session):
+        self.session = session
+
+    def execute(self) -> str:
+        successes = len(self.session.get_history())
+        failures = len(self.session.get_errors())
+        return f"Successful: {successes}; Failed: {failures}"
