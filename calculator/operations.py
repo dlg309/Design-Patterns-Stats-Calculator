@@ -19,3 +19,7 @@ class Operations:
     @staticmethod
     def absolute_difference(a, b):
         return abs(a - b)
+
+    @staticmethod
+    def modulo(a, b):
+        return a % b

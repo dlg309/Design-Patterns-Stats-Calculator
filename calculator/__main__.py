@@ -1,13 +1,12 @@
-"""Run the Part 1 calculation demonstration."""
+"""Run the Part 2 factory demonstration."""
 
-from calculator.calculation import Calculation
+from calculator.factory import CalculationFactory
 from calculator.history import History
-from calculator.operations import Operations
 
 
 def main():
     history = History()
-    calculation = Calculation(2, 3, Operations.add)
+    calculation = CalculationFactory.create("add", 2, 3)
 
     result = calculation.get_result()
     history.add(calculation, result)
