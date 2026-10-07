@@ -1,4 +1,4 @@
-"""Run the Part 2 factory demonstration."""
+"""Run the Part 3 flexible-input demonstration."""
 
 from calculator.factory import CalculationFactory
 from calculator.history import History
@@ -6,12 +6,15 @@ from calculator.history import History
 
 def main():
     history = History()
-    calculation = CalculationFactory.create("add", 2, 3)
+    calculations = [
+        CalculationFactory.create("add", 2, 3),
+        CalculationFactory.create("power", 3, exponent=4),
+    ]
 
-    result = calculation.get_result()
-    history.add(calculation, result)
-
-    print(result)
+    for calculation in calculations:
+        result = calculation.get_result()
+        history.add(calculation, result)
+        print(result)
 
 
 if __name__ == "__main__":

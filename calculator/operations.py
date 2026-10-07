@@ -23,3 +23,30 @@ class Operations:
     @staticmethod
     def modulo(a, b):
         return a % b
+
+    @staticmethod
+    def square(value):
+        return value * value
+
+    @staticmethod
+    def sqrt(value):
+        from math import sqrt
+
+        return sqrt(value)
+
+    @staticmethod
+    def sum(*values):
+        if not values:
+            raise ValueError("Sum requires at least one value.")
+
+        return sum(values)
+
+    @staticmethod
+    def power(value, *, exponent=2):
+        from math import pow
+
+        return pow(value, exponent)
+
+    @staticmethod
+    def scale(value, *, factor=1):
+        return value / factor

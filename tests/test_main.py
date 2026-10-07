@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 
 
-def test_module_prints_demonstration_result():
+def test_module_prints_demonstration_results():
     project_root = Path(__file__).resolve().parents[1]
 
     completed = subprocess.run(
@@ -14,5 +14,5 @@ def test_module_prints_demonstration_result():
         check=True,
     )
 
-    assert completed.stdout.strip() == "5.0"
+    assert completed.stdout.splitlines() == ["5.0", "81.0"]
     assert completed.stderr == ""
