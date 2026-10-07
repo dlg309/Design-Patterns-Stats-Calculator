@@ -1,4 +1,4 @@
-"""Convert user input into application commands."""
+"""Parse requests and run the interactive calculator."""
 
 from calculator.commands import (
     CalculateCommand,
@@ -8,6 +8,29 @@ from calculator.commands import (
     HistoryCommand,
 )
 from calculator.factory import CalculationFactory
+from calculator.inputs import read_csv_values
+from calculator.session import CalculatorSession
+
+
+def parse_arguments(tokens):
+    values = []
+    options = {}
+
+    for token in tokens:
+        if "=" in token:
+            key, value = token.split("=", 1)
+
+            if not key or not value:
+                raise ValueError("Options must use key=value.")
+
+            if key in options:
+                raise ValueError(f"Duplicate option: {key}")
+
+            options[key] = value
+        else:
+            values.append(token)
+
+    return values, options
 
 
 def prepare_command(line, session):
@@ -38,33 +61,34 @@ def prepare_command(line, session):
             raise ValueError("count does not accept arguments.")
         return CountCommand(session)
 
+    if name == "csv":
+        if len(parts) < 3:
+            raise ValueError("Usage: csv mean|stddev PATH [column=NAME] [ddof=0|1]")
+
+        operation = parts[1].lower()
+        if operation not in ("mean", "stddev"):
+            raise ValueError("CSV supports mean and stddev only.")
+
+        extra_values, options = parse_arguments(parts[3:])
+        if extra_values:
+            raise ValueError("CSV settings must use key=value.")
+
+        column = options.pop("column", "value")
+        values = read_csv_values(parts[2], column=column)
+        calculation = CalculationFactory.create(
+            operation, *values, **options
+        )
+        return CalculateCommand(session, calculation)
+
     if name not in CalculationFactory.operations:
         raise ValueError(f"Unknown command: {name}")
 
-    values = []
-    options = {}
-
-    for token in parts[1:]:
-        if "=" in token:
-            key, value = token.split("=", 1)
-
-            if not key or not value:
-                raise ValueError("Options must use key=value.")
-
-            if key in options:
-                raise ValueError(f"Duplicate option: {key}")
-
-            options[key] = value
-        else:
-            values.append(token)
-
+    values, options = parse_arguments(parts[1:])
     calculation = CalculationFactory.create(name, *values, **options)
     return CalculateCommand(session, calculation)
 
 
 def run():
-    from calculator.session import CalculatorSession
-
     session = CalculatorSession()
     print("Calculator ready. Type help for commands or exit to quit.")
 
@@ -86,5 +110,5 @@ def run():
             print("\nGoodbye!")
             break
 
-        except (ValueError, TypeError, ArithmeticError) as error:
+        except (ValueError, TypeError, ArithmeticError, OSError) as error:
             print(f"Error: {error}")

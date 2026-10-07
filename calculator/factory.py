@@ -7,6 +7,8 @@ from calculator.validation import numeric_values
 
 class CalculationFactory:
     operations = {
+        "mean": Operations.mean,
+        "stddev": Operations.stddev,
         "add": Operations.add,
         "subtract": Operations.subtract,
         "multiply": Operations.multiply,
@@ -35,6 +37,7 @@ class CalculationFactory:
     }
 
     allowed_options = {
+        "stddev": {"ddof"},
         "power": {"exponent"},
         "scale": {"factor"},
     }

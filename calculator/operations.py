@@ -50,3 +50,15 @@ class Operations:
     @staticmethod
     def scale(value, *, factor=1):
         return value / factor
+
+    @staticmethod
+    def mean(*values):
+        from calculator.statistics import mean
+
+        return mean(values)
+
+    @staticmethod
+    def stddev(*values, ddof=1):
+        from calculator.statistics import standard_deviation
+
+        return standard_deviation(values, ddof=ddof)

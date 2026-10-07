@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 HELP = (
     "Commands: add/subtract/multiply/divide/modulo/absolute_difference A B; "
     "square/sqrt VALUE; power VALUE exponent=N; scale VALUE factor=N; "
-    "sum VALUES; history; clear; count; help; exit"
+    "csv mean|stddev PATH [column=NAME] [ddof=0|1]; sum VALUES; mean VALUES; stddev VALUES ddof=0|1; history; clear; count; help; exit"
 )
 
 
